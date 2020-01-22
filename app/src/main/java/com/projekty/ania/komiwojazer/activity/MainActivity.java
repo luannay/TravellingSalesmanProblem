@@ -1,4 +1,4 @@
-package pl.edu.pg.tsp.activity;
+package com.projekty.ania.komiwojazer.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,9 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import pl.edu.pg.tsp.ITSPService;
-import pl.edu.pg.tsp.R;
-import pl.edu.pg.tsp.service.TSPService;
+import com.projekty.ania.komiwojazer.ITSPService;
+import com.projekty.ania.komiwojazer.R;
+import com.projekty.ania.komiwojazer.service.KomiwojazerService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void connectService() {
         serviceConnection = new RemoteServiceConnection();
-        Intent i = new Intent(this, TSPService.class);
+        Intent i = new Intent(this, KomiwojazerService.class);
         boolean ret = bindService(i, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 

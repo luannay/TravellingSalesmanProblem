@@ -1,5 +1,5 @@
 // ITSPService.aidl
-package pl.edu.pg.tsp;
+package com.projekty.ania.komiwojazer;
 
 // Declare any non-default types here with import statements
 
