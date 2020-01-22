@@ -14,34 +14,42 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.projekty.ania.komiwojazer.ITSPService;
+import com.projekty.ania.komiwojazer.aidlService;
 import com.projekty.ania.komiwojazer.R;
 import com.projekty.ania.komiwojazer.service.KomiwojazerService;
 
+// https://www.sitepoint.com/aidl-for-sharing-functionality-between-android-apps/?fbclid=IwAR0fYrVRmAz6Bp8FilmK-SJaCUV7o1YSX0TynsIs04ovT1MrPfQ_jx4KhQw
+
 public class MainActivity extends AppCompatActivity {
 
-    private ITSPService service;
-    private RemoteServiceConnection serviceConnection;
-    private TextView resultText;
+
+    private TextView nodesTextView;
+    private Button startButton;
+    private aidlService service;
+    private RemoteServiceConnection remote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         connectService();
 
-        Button startButton = (Button)findViewById(R.id.button);
-        resultText = (TextView)findViewById(R.id.textView);
+
+        startButton = (Button)findViewById(R.id.startButton);
+        nodesTextView = (TextView)findViewById(R.id.textView);
+
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     if (service != null) {
-                        int result = service.getResult();
-                        resultText.setText(String.valueOf(result));
+                        int nodesNumber = service.getProduct();
+                        nodesTextView.setText(String.valueOf(nodesNumber));
                     }
                 } catch (RemoteException e) {
-                    Log.e("MAIN", "Exception caught when calling service for result");
+                    Log.e("MAIN", "Exception: " + e) ;
                 }
             }
         });
@@ -49,16 +57,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void connectService() {
-        serviceConnection = new RemoteServiceConnection();
+        remote = new RemoteServiceConnection();
         Intent i = new Intent(this, KomiwojazerService.class);
-        boolean ret = bindService(i, serviceConnection, Context.BIND_AUTO_CREATE);
+        boolean ret = bindService(i, remote, Context.BIND_AUTO_CREATE);
     }
 
     class RemoteServiceConnection implements ServiceConnection {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder boundService) {
-            service = ITSPService.Stub.asInterface(boundService);
+            service = aidlService.Stub.asInterface(boundService);
             Log.d("MAIN", "Service connected");
         }
 
